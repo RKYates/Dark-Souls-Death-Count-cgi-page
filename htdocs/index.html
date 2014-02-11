@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Dark Souls death counter - Home</title>
+<link rel="stylesheet" type="text/css" href="styles.css">
+<style type="text/css">
+#saveFile
+{
+    margin:30px auto;
+    width:500px;
+    height:50px;
+    padding:5px;
+    border:5px groove #443300;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+<div class="container">
+  <div class="header">
+  <img src="/images/header.png" alt="" />
+  </div>
+	<div class="navbar">
+  	<ul>
+  		<li><a href="index.html">Home</a></li>
+  		<li><a href="cgi-bin/stats.py">Stats</a></li>
+  		<li><a href="about.html">About</a></li>
+  	</ul>
+	</div>
+	<div class="content">
+  	<p>Welcome to DarkSoulsDeaths!  Upload a save file from Dark Souls to see how many times you've died.</p>
+  	<form id="saveFile" method="POST" action="cgi-bin/results.py" enctype="multipart/form-data" >
+    	<input type="file" id="dsSaveFile" name="dsSaveFile" />
+  		<input type="submit" id="submit" value="Submit" />
+  	</form>
+		<p>PC players: Your save file can be found in Documents/NBGI/DarkSouls/[your name].</p>
+  	<p>PS3 and Xbox 360 players: You're shit out of luck.  Sorry!  If you have an idea on how to make this work for consoles, <a href="about.html#contact">let us know</a>.</p>
+	</div>
+</div>
+</div>
+</body>
+</html>

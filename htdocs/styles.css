@@ -1,0 +1,158 @@
+/*******palette:*******
+dark brown: #443300
+light brown: #A1997F
+bright yellow: #FFEE00
+dark yellow: #CCBB00
+dark gray: #111111
+light gray: #CCCCCC
+very light gray: #EEEEEE
+***********************/
+
+/* load custom font(s) */
+@import url(http://fonts.googleapis.com/css?family=Marcellus+SC);
+
+html
+{
+ background-color:black;
+ color:#EEEEEE;
+}
+html a
+{
+ text-decoration:none;
+}
+.wrapper
+{
+ width:1000px;
+ margin:0 auto;
+}
+.content
+{
+ width:100%;
+ background-color:#111111;
+ border:2px solid #443300;
+ border-radius:10px;
+ padding:20px;
+ float:left;
+}
+.container a
+{
+ color:#FFEE00;
+}
+.container a:hover
+{
+ color:#CCBB00;
+}
+.container a.spoiler-link:hover::after
+{
+ content:"Warning: This link points to an external page which may contain spoilers.";
+ position:absolute;
+ width:160px;
+ background-color:lightgrey;
+ border:2px inset black;
+ border-radius:5px;
+ padding:5px;
+ font-size:10pt;
+ font-family:arial, sans-serif;
+ color:black;
+}
+.header
+{
+ width:100%;
+}
+.navbar
+{
+ margin-left:auto;
+ margin-right:auto;
+ font-family:'Marcellus SC', serif;
+ font-size:18px;
+}
+.navbar ul
+{
+ width:215px;
+ margin:0 auto;
+}
+.navbar li
+{
+ display:inline;
+ list-style-type:none;
+ padding:0px 10px;
+}
+form select, form input, form label, form p, form div
+{
+ float:left;
+}
+form select, form input, form p
+{
+ clear:left;
+}
+
+
+/* results table containing all characters in a save file */
+#table-results
+{
+ margin:30px auto 10px;
+ border:4px ridge #443300;
+ padding:0px;
+}
+#table-results td
+{
+ border:1px solid #443300;
+ padding:5px;
+}
+#table-results td:nth-child(1)
+{
+    width:250px
+}
+#table-results td:nth-child(2)
+{
+    width:150px
+}
+#table-results .tr-char
+{
+ display:none;
+}
+
+/* individual character form */
+#table-char
+{
+ margin:30px auto 10px;
+ border:4px ridge #443300;
+ padding:0;
+}
+#table-char td
+{
+ border:1px solid #443300;
+ padding:5px;
+}
+.extra-info
+{
+ border:1px solid #FFEE00;
+ border-radius:5px;
+ padding:10px;
+ margin:10px;
+ width:960px;
+}
+
+/* stats page */
+.span-stat
+{
+ color:#CCBB00;
+}
+h2.your-stats
+{
+ margin-bottom:-30;
+ margin-top:30px;
+ font-family:"Marcellus SC", Serif;
+ font-weight:normal;
+}
+
+/* appends a copyright disclaimer to every page */
+.wrapper::after
+{
+    content:"Dark Souls is © NAMCO BANDAI Games Inc. and FromSoftware, Inc.  This site is in no way affiliated with or endorsed by either company.";
+    float:left;
+    clear:both;
+    margin-top:50px;
+    font-size:11px;
+    color:gray;
+}
