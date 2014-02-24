@@ -21,25 +21,16 @@ print("""
 <title>Dark Souls death counter - Submit your stats</title>
 <link rel="stylesheet" type="text/css" href="../styles.css">
 <style type="text/css">
-#table-char
+html
 {
- margin:30px auto 10px;
- border:4px ridge #443300;
- padding:0;
-}
-#table-char td
-{
- border:1px solid #443300;
- padding:5px;
+ background-image:url(../images/BG_capra2_fade.jpg);
 }
 </style>
 </head>
 <body>
+<div class="header"></div>
 <div class="wrapper">
 <div class="container">
-  <div class="header">
-  <img src="/images/header.png" alt="" />
-  </div>
 	<div class="navbar">
   	<ul>
   		<li><a href="../index.html">Home</a></li>
@@ -124,12 +115,12 @@ print("""
 				<option value="18">Thunder &amp; Thighs</option>
 				<option value="19">Timon &amp; Pumba</option>
 			</select>
-		</div></div>
-		<p></p>
+		</div>
 		<input type="hidden" name="name" value="{name}" />
 		<input type="hidden" name="deaths" value="{deaths}" />
   		<input type="submit" id="submit" value="Enough dicking around. How'd I do?" />
-  	</form>
+  		</form>
+	<p></p>
 	</div>
 </div>
 </div>

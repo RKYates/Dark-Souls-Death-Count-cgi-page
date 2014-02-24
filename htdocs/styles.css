@@ -15,10 +15,17 @@ html
 {
  background-color:black;
  color:#EEEEEE;
+ background-image:url(images/BG_ornstein_fade.jpg);
+ background-repeat:no-repeat;
+ background-position:center 0%;
 }
 html a
 {
  text-decoration:none;
+}
+body
+{
+ margin:0;
 }
 .wrapper
 {
@@ -28,11 +35,16 @@ html a
 .content
 {
  width:100%;
- background-color:#111111;
+ background-color:black;
  border:2px solid #443300;
  border-radius:10px;
  padding:20px;
  float:left;
+}
+.content strong
+{
+ font-family:'Marcellus SC', serif;
+ text-transform: uppercase;
 }
 .container a
 {
@@ -57,7 +69,14 @@ html a
 }
 .header
 {
- width:100%;
+    /*margin-top:20px;*/
+    height:170px;
+    width:100%;
+    background-image:url(images/header.png);
+    background-repeat:no-repeat;
+    background-position:center;
+    background-color:rgba(0,0,0,.7);
+    box-shadow:0 0 20px 15px rgba(0,0,0,0.7)
 }
 .navbar
 {
@@ -68,14 +87,16 @@ html a
 }
 .navbar ul
 {
- width:215px;
  margin:0 auto;
+ padding:0;
+ text-align:center;
 }
 .navbar li
 {
  display:inline;
  list-style-type:none;
  padding:0px 10px;
+ margin:0;
 }
 form select, form input, form label, form p, form div
 {
@@ -85,7 +106,19 @@ form select, form input, form p
 {
  clear:left;
 }
+h2
+{
+ font-family:"Marcellus SC", Serif;
+ font-weight:normal;
+}
 
+/* home page save file submissions */
+#div-loading img, #div-loading h2
+{
+ margin: 0 auto;
+ display:block;
+ text-align:center;
+}
 
 /* results table containing all characters in a save file */
 #table-results
@@ -126,7 +159,7 @@ form select, form input, form p
 }
 .extra-info
 {
- border:1px solid #FFEE00;
+ border:1px solid #A1997F;
  border-radius:5px;
  padding:10px;
  margin:10px;
@@ -138,21 +171,36 @@ form select, form input, form p
 {
  color:#CCBB00;
 }
-h2.your-stats
+h2.your-stats, h2.all-stats
 {
  margin-bottom:-30;
  margin-top:30px;
- font-family:"Marcellus SC", Serif;
- font-weight:normal;
 }
+/*.you-are-here
+{
+ display:none;
+ height:0px;
+ position:absolute;
+ z-index:1;
+}
+.YAH-marker
+{
+ height:300px;
+ width:1px;
+ background-color:#443300;
+ position:relative;
+}*/
 
 /* appends a copyright disclaimer to every page */
-.wrapper::after
+.content::after
 {
     content:"Dark Souls is © NAMCO BANDAI Games Inc. and FromSoftware, Inc.  This site is in no way affiliated with or endorsed by either company.";
-    float:left;
-    clear:both;
-    margin-top:50px;
     font-size:11px;
     color:gray;
+    position:relative;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:30px;
+    text-align:center;
 }

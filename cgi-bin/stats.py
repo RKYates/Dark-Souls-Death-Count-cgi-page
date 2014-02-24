@@ -11,6 +11,7 @@ import uuid
 import mysql.connector
 from mysql.connector import errorcode
 import configparser
+import re
 
 def printRowsForChart(counts):
 	for row in counts[:-1]:
@@ -28,7 +29,7 @@ print("""
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>Dark Souls death counter - Home</title>
+<title>Dark Souls death counter - Stats</title>
 <link rel="stylesheet" type="text/css" href="../styles.css">
 <style type="text/css">
 </style>
@@ -80,76 +81,74 @@ else:
 		playthrough = form["playthrough"].value
 		progress = form["progress"].value
 		smornstein = form["smornstein"].value
-		adpp = round(float(deaths) / (float(playthrough) + float(progress)))
-
+		totalProgress = float(playthrough) + float(progress)
+		if (totalProgress == 0):
+			#treat as progress = .02 but don't want to mess up charts by explicitly setting progress as such
+			adpp = deaths * 50
+		else:
+			adpp = round(float(deaths) / totalProgress)
 		
-		#insert data from form into DB
-		insertStatement = ("INSERT INTO characters "
-							"(playerid, charactername, deaths, playthrough, progress, shitholes, dragonbros, asylum, paintedworld, manus, smornstein, adpp) "
-							"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
-		insertData = (str(playerId), name, deaths, playthrough, progress, shitholes, dragonbros, asylum, paintedworld, manus, smornstein, adpp)
-		cursor.execute(insertStatement, insertData)
-		dbConn.commit()
+		#input validation against patterns
+		dataIsValid = False
+		if re.match(r"^.{1,13}$", name) and \
+		   re.match(r"^\d{1,6}$", deaths) and \
+		   re.match(r"^\d$", str(playthrough)) and \
+		   re.match(r"^0\.\d\d$", str(progress)) and \
+		   re.match(r"^\d\d?$", str(smornstein)):
+			dataIsValid = True
+			
+		if dataIsValid:
+			#insert data from form into DB
+			insertStatement = ("INSERT INTO characters "
+								"(playerid, charactername, deaths, playthrough, progress, shitholes, dragonbros, asylum, paintedworld, manus, smornstein, adpp) "
+								"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+			insertData = (str(playerId), name, deaths, playthrough, progress, shitholes, dragonbros, asylum, paintedworld, manus, smornstein, adpp)
+			cursor.execute(insertStatement, insertData)
+			dbConn.commit()
+		else:
+			name = "";
+			print("<h1 align=\"center\">BAD CHARACTER DATA</h1>")
 
 	#get data from DB
 	#ADPP
-	queryAdpp = ("select adpp, count(adpp) from characters group by adpp")
+	queryAdpp = ("select * from adppcounts")
 	cursor.execute(queryAdpp)
 	countsOfAdpp = cursor.fetchall()
 
 	#deaths
-	queryDeaths = ("select deaths, count(deaths) from characters group by deaths")
+	queryDeaths = ("select * from deathcounts")
 	cursor.execute(queryDeaths)
 	countsOfDeaths = cursor.fetchall()
 
 	#playthrough
-	queryPlaythrough = ("select playthrough, count(playthrough) from characters group by playthrough")
+	queryPlaythrough = ("select * from playthroughcounts")
 	cursor.execute(queryPlaythrough)
 	countsOfPlaythroughs = cursor.fetchall()
 
 	#progress
-	queryProgress = ("select progress * 10, count(progress) from characters group by progress")
+	queryProgress = ("select * from progresscounts")
 	cursor.execute(queryProgress)
 	countsOfProgress = cursor.fetchall()
 
 	#smornstein
-	querySmornstein = ("select smornsteinname, count(c.smornstein) "
-						"from characters as c "
-						"inner join smornstein as s "
-						"on c.smornstein = s.smornsteinid "
-						"group by c.smornstein")
+	querySmornstein = ("select * from smornsteincounts")
 	cursor.execute(querySmornstein)
 	countsOfSmornstein = cursor.fetchall()
 
 	#optional areas
-	queryOptional = "select o.optionalareasname, count(*) from characters as c inner join optionalareas as o on c.{col} = 1 and o.optionalareasid = {optionalId}"
-	queryShitholes = (queryOptional.format(col="shitholes", optionalId=0)) 
-	queryDragonbros = (queryOptional.format(col="dragonbros", optionalId=1))
-	queryAsylum = (queryOptional.format(col="asylum", optionalId=2))
-	queryPaintedworld = (queryOptional.format(col="paintedworld", optionalId=3))
-	queryManus = (queryOptional.format(col="manus", optionalId=4))
-
-	cursor.execute(queryShitholes)
-	countsOfOptionals.append(cursor.fetchone())
-	cursor.execute(queryDragonbros)
-	countsOfOptionals.append(cursor.fetchone())
-	cursor.execute(queryAsylum)
-	countsOfOptionals.append(cursor.fetchone())
-	cursor.execute(queryPaintedworld)
-	countsOfOptionals.append(cursor.fetchone())
-	cursor.execute(queryManus)
-	countsOfOptionals.append(cursor.fetchone())
-
+	queryForOptionalValues = ("SELECT * FROM optionalcounts")
+	cursor.execute(queryForOptionalValues)
+	countsOfOptionals = cursor.fetchall()
+	
 	cursor.close()
 	dbConn.close()
 
 print("""
 <body>
+<div class="header">
+</div>
 <div class="wrapper">
 <div class="container">
-  <div class="header">
-  <img src="/images/header.png" alt="" />
-  </div>
 	<div class="navbar">
   	<ul>
   		<li><a href="../index.html">Home</a></li>
@@ -187,6 +186,8 @@ var deaths = {deaths};
 var ADPP = {adpp};
 var playthrough = {playthrough};
 var progress = {progress};
+var fsize = '25'; // Larger font size if the player-specific titles don't show up.
+var fname = 'Marcellus SC' // Fancier font, same deal.
 """.format(name=name, deaths=deaths, progress=progress, playthrough=playthrough, adpp=adpp))
 print("""
 if(character !== "") // Show how the submitted character compares with global stats.
@@ -200,6 +201,8 @@ if(character !== "") // Show how the submitted character compares with global st
   {
 	yourStats[i].style.display = "inline";
   }
+  fname = 'Arial';
+  fsize = '15';
 }
 document.getElementById('span-ADPP').innerHTML = ADPP;
 document.getElementById('span-deaths').innerHTML = deaths;
@@ -262,18 +265,18 @@ print("""]);
   
   var options = {
     title:"Average Deaths per Playthrough for All Players:",
-		titleTextStyle: {color: '#CCBB00'},
+		titleTextStyle: {color: '#CCBB00', fontSize: fsize, fontName: fname},
     width:1000, height:400,
     hAxis: {title: 'Deaths', titleTextStyle: {color: '#CCCCCC'}, textStyle: {color: '#CCCCCC'}},
     vAxis: {title: 'Players', titleTextStyle: {color: '#CCCCCC'}, textStyle: {color: '#CCCCCC'}},
-    bar: {groupWidth: '90%'},
+    curveType: 'function',
     legend: {position: 'none'},
 		backgroundColor: 'none',
 		colors: ['#CCBB00']
   };
 
   // Create and draw the visualization.
-  new google.visualization.ColumnChart(document.getElementById('chart-ADPP')).
+  new google.visualization.LineChart(document.getElementById('chart-ADPP')).
       draw(data, options);
 }
 
@@ -288,8 +291,8 @@ if len(countsOfDeaths) > 0:
 print("""]);
   
   var options = {
-    title:"Total Death Counts for All Players",
-		titleTextStyle: {color: '#CCBB00'},
+    title:"Total Death Counts for All Players:",
+		titleTextStyle: {color: '#CCBB00', fontSize: fsize, fontName: fname},
     width:1000, height:400,
     hAxis: {title: 'Deaths', titleTextStyle: {color: '#CCCCCC'}, textStyle: {color: '#CCCCCC'}},
     vAxis: {title: 'Players', titleTextStyle: {color: '#CCCCCC'}, textStyle: {color: '#CCCCCC'}},
@@ -316,7 +319,7 @@ print("""]);
 
   var options = {
     title:"Global Completion Rate:",
-		titleTextStyle: {color: '#CCBB00'},
+		titleTextStyle: {color: '#CCBB00', fontSize: fsize, fontName: fname},
 		curveType: "function",
     width: 1000, height: 400,
     vAxis: {title:"% of players completed", titleTextStyle: {color: '#CCCCCC'}, textStyle: {color: '#CCCCCC'}},
@@ -343,7 +346,7 @@ print("""]);
 
   var options = {
     title:"Global Completion Rate (within current playthrough):",
-		titleTextStyle: {color: '#CCBB00'},
+		titleTextStyle: {color: '#CCBB00', fontSize: fsize, fontName: fname},
 		curveType: "none",
     width: 1000, height: 400,
     vAxis: {title:"% of players completed", titleTextStyle: {color: '#CCCCCC'}, textStyle: {color: '#CCCCCC'}},

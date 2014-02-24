@@ -12,10 +12,10 @@ def getCharsAndDeaths():
 	chars = []
 	form = cgi.FieldStorage()
 	if "dsSaveFile" not in form:
-		print("No save file input. However, enjoy everyone else's stats:<br>")
+		print("No save file input. You can either <a href='/index.html'>submit a save file</a> or <a href='stats.py'>view other players' stats.</a><br>")
 	else:
 		saveFile = form["dsSaveFile"]
-		if saveFile.file and saveFile.done != -1 and len(saveFile.value) != 0:
+		if saveFile.file and saveFile.done != -1 and len(saveFile.value) == 4330480:
 			saveFile.file.seek(0x2c0, 0)
 			for slot in range(0, 10):
 				saveFile.file.seek(0x100, 1)
@@ -45,40 +45,20 @@ print("""
 </noscript>
 <html>
 <head>
-<title>Dark Souls death counter - Submit your stats</title>
+<title>Dark Souls death counter - Results</title>
 <link rel="stylesheet" type="text/css" href="../styles.css">
 <style type="text/css">
-#table-results
+html
 {
- margin:30px auto 10px;
- border:4px ridge #443300;
- padding:0px;
-}
-#table-results td
-{
- border:1px solid #443300;
- padding:5px;
-}
-#table-results td:nth-child(1)
-{
-    width:250px
-}
-#table-results td:nth-child(2)
-{
-    width:150px
-}
-.tr-char
-{
- display:none;
+ background-image:url(../images/BG_torchbastards_fade.jpg);
 }
 </style>
 </head>
 <body>
+<div class="header">
+</div>
 <div class="wrapper">
 <div class="container">
-  <div class="header">
-  <img src="/images/header.png" alt="" />
-  </div>
 	<div class="navbar">
   	<ul>
   		<li><a href="../index.html">Home</a></li>
