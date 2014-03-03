@@ -13,11 +13,11 @@ form = cgi.FieldStorage()
 print("Content-Type: text/html")
 print("""
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
 <noscript>
 <p>Sorry, we can't analyze your stats without scripting enabled.</p>
 </noscript>
-<html>
-<head>
 <title>Dark Souls death counter - Submit your stats</title>
 <link rel="stylesheet" type="text/css" href="../styles.css">
 <style type="text/css">
@@ -119,11 +119,23 @@ print("""
 		<input type="hidden" name="name" value="{name}" />
 		<input type="hidden" name="deaths" value="{deaths}" />
   		<input type="submit" id="submit" value="Enough dicking around. How'd I do?" />
-  		</form>
+  		</form>""".format(name=form['name'].value, deaths=form['deaths'].value))
+print("""
 	<p></p>
 	</div>
 </div>
 </div>
 </body>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-47846181-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 </html>
-""".format(name=form['name'].value, deaths=form['deaths'].value))
+""")
