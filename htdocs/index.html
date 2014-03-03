@@ -15,7 +15,7 @@ html
     width:500px;
     height:50px;
     padding:5px;
-    border:5px groove #443300;
+    border:4px double #887755;
 }
 </style>
 </head>
@@ -32,7 +32,7 @@ html
   	</ul>
 	</div>
 	<div class="content">
-  	<p>Welcome to Dark Souls Deaths!  Upload a save file from Dark Souls to see how many times you've died.</p>
+  	<p class="text-large">Welcome to Dark Souls Deaths!  Upload a save file from Dark Souls to see how many times you've died.</p>
   	<form id="saveFile" method="POST" action="cgi-bin/results.py" enctype="multipart/form-data" >
     	<input type="file" id="dsSaveFile" name="dsSaveFile" />
   		<input type="submit" id="submit" value="Submit" onclick="document.getElementById('div-loading').style.display = 'block';"/>

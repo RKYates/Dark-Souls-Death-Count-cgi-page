@@ -41,7 +41,7 @@ def getCharsAndDeaths():
 					saveFile.file.seek(-0x120, 1)
 				saveFile.file.seek(0x60190, 1)
 		else:
-			print("Did not input a valid file. However, enjoy everyone else's stats:<br>")
+			print("Did not input a valid file.")
 	return chars
 
 #get DB connection info
